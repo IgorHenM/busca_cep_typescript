@@ -2,7 +2,7 @@ import './style.css';
 import { addListeners, setOutputComponents } from './setup';
 import loadingIcon from "./assets/loading-svgrepo-com.svg";
 import { $ } from 'jquery';
-import { Titles } from './setup';
+import { Titles } from "./utils/Constants";
 
 document.querySelector<HTMLDivElement>('#app')!.innerHTML = `
 <div class="modal_overflow" id="overflow" style="display: none;">

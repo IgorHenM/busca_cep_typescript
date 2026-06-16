@@ -1,7 +1,9 @@
 import type { CepDTO } from "./dto/Cep";
-import axios from 'axios';
 import { MapRequest } from "./model/MapRequest";
 import { CepUtils } from "./utils/CepUtils";
+import { InfoUtils } from "./utils/InfoUtils";
+import { Descriptions, Titles, TimeRate } from "./utils/Constants";
+import { CepService } from "./services/CepService";
 
 let cep = "";
 
@@ -13,38 +15,7 @@ let paragrafError: any = null;
 let frameMap: any = null;
 
 let enterDisabled: boolean = false;
-
-let actualInfos: CepDTO = {
-    cep: '',
-    logradouro: '',
-    complemento: '',
-    unidade: '',
-    bairro: '',
-    localidade: '',
-    uf: '',
-    estado: '',
-    regiao: '',
-    ibge: '',
-    gia: '',
-    ddd: '',
-    siafi: '',
-    erro: false
-};
-
-enum Descriptions {
-    INVALID_CEP = "O CEP deve possuir 8 números ou atender ao seguinte formato: 00000-000",
-    NO_INFO_CEP = "Nenhuma informação para o CEP foi encontrada! Verifique se o CEP está correto e tente novamente.",
-    EMPTY_ADDRESS = "Endereço vazio"
-}
-
-export enum Titles {
-    NORMAL_BUTTON_SEARCH = "Buscar - Enter",
-    DISABLED_BUTTON_SEARCH = "Buscar - (Desabilitado)"
-}
-
-enum TimeRate {
-    NEW_REQUEST_WAIT = 5000
-}
+let actualInfos: CepDTO = CepUtils.emptyCepDTO();
 
 export function addListeners(components: [JQuery<HTMLButtonElement>, JQuery<HTMLInputElement>, JQuery<HTMLButtonElement>]): void {
     const [button, input, buttonErrorModal] = components;
@@ -77,7 +48,7 @@ function applyWindowListeners(): void {
 }
 
 async function onEnter() {
-    if (enterDisabled || !isCepDifferent()) return;
+    if (enterDisabled || !CepUtils.isCepDifferent(cep, actualInfos.cep)) return;
 
     await buscar();
     enterDisabled = true;
@@ -89,7 +60,7 @@ async function onEnter() {
 
 async function onButtonSearchClick(event?: Event) {
     const button: HTMLButtonElement = event?.target as HTMLButtonElement;
-    if (!cep || button.disabled || !isCepDifferent() || enterDisabled) return;
+    if (!cep || button.disabled || !CepUtils.isCepDifferent(cep, actualInfos.cep) || enterDisabled) return;
     
     await buscar();
     button.disabled = true;
@@ -112,9 +83,11 @@ async function buscar() {
 
     try {
         openLoading();
-        actualInfos = await getCepInformation(normalizedCep);
-        const infoStructure = !actualInfos.erro ? createInfoStructure(actualInfos) 
-            : createInfoStructure(emptyCepDTO());
+        const response = await CepService.getCepInformation(normalizedCep);
+        actualInfos = response.data;
+
+        const infoStructure = !actualInfos.erro ? InfoUtils.createInfoStructure(actualInfos) 
+            : InfoUtils.createInfoStructure(CepUtils.emptyCepDTO());
 
         divInfo.html(infoStructure);
         divInfo.css('display', 'flex');
@@ -139,27 +112,6 @@ function setMapLocation(response: CepDTO): void {
 
 function setCep(value: string) {
     cep = value;
-}
-
-async function getCepInformation(cep: string): Promise<CepDTO> {
-    const response = await axios.get(`https://viacep.com.br/ws/${cep}/json/`);
-    return response.data;
-}
-
-function createInfoStructure(infos: CepDTO): string {
-    if (JSON.stringify(infos) === JSON.stringify(emptyCepDTO())) return '';
-    const keys: string[] = Object.keys(infos);
-    let html: string = ``;
-
-    for (const key of keys) {
-        const label: string = key.toUpperCase();
-        const value = formatNoValue(infos[key as keyof CepDTO])
-
-        html += `<div class="sessaoInfo">
-                     <b>${label}:</b> ${value}
-                 </div>`;
-    }
-    return html;
 }
 
 function toggleErrorModal(description?: string) {
@@ -190,28 +142,6 @@ function toggleErrorModal(description?: string) {
 
 }
 
-function emptyCepDTO(): CepDTO {
-    return {
-        cep: '',
-        logradouro: '',
-        complemento: '',
-        unidade: '',
-        bairro: '',
-        localidade: '',
-        uf: '',
-        estado: '',
-        regiao: '',
-        ibge: '',
-        gia: '',
-        ddd: '',
-        siafi: '',
-        erro: false
-    };
-}
-
-function formatNoValue(value: any) {
-    return value || '--';
-}
 function openLoading(): void {
     divLoadingContent.css("display", "flex");
     divOverflow.css("display", "block");
@@ -220,12 +150,6 @@ function openLoading(): void {
 function closeLoading(): void {
     divLoadingContent.css("display", "none");
     divOverflow.css("display", "none");
-}
-
-function isCepDifferent(): boolean {
-    const normalizedCep: string = CepUtils.normalizeCep(cep);
-    const normalizedActualCep: string = CepUtils.normalizeCep(actualInfos.cep || "");
-    return normalizedActualCep !== normalizedCep;
 }
 
 applyWindowListeners();
