@@ -12,3 +12,9 @@ export enum Titles {
 export enum TimeRate {
     NEW_REQUEST_WAIT = 5000
 }
+
+export enum DisplayOptions {
+    NONE = "none",
+    BLOCK = "block",
+    FLEX = "flex"
+}

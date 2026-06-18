@@ -1,4 +1,4 @@
-import './style.css';
+import './styles/style.css';
 import { addListeners, setOutputComponents } from './setup';
 import loadingIcon from "./assets/loading-svgrepo-com.svg";
 import { $ } from 'jquery';

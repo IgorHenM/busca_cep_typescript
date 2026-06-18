@@ -2,9 +2,8 @@ import type { CepDTO } from "./dto/Cep";
 import { MapRequest } from "./model/MapRequest";
 import { CepUtils } from "./utils/CepUtils";
 import { InfoUtils } from "./utils/InfoUtils";
-import { Descriptions, Titles, TimeRate } from "./utils/Constants";
+import { Descriptions, Titles, TimeRate, DisplayOptions } from "./utils/Constants";
 import { CepService } from "./services/CepService";
-
 let cep = "";
 
 let divInfo: any = null;
@@ -115,14 +114,14 @@ function setCep(value: string) {
 }
 
 function toggleErrorModal(description?: string) {
-    const isModalOpened = divErrorModal.css("display") === "block";
-    const toggle = isModalOpened ? "none" : "block";
+    const isModalOpened = divErrorModal.css("display") === DisplayOptions.BLOCK;
+    const toggle = isModalOpened ? DisplayOptions.NONE : DisplayOptions.BLOCK;
 
     if (description) {
         paragrafError.text(description);
     }
 
-    if (toggle === "none") {
+    if (toggle === DisplayOptions.NONE) {
         divErrorModal.removeClass("opened");
 
         setTimeout(() => {
@@ -143,13 +142,13 @@ function toggleErrorModal(description?: string) {
 }
 
 function openLoading(): void {
-    divLoadingContent.css("display", "flex");
-    divOverflow.css("display", "block");
+    divLoadingContent.css("display", DisplayOptions.FLEX);
+    divOverflow.css("display", DisplayOptions.BLOCK);
 }
 
 function closeLoading(): void {
-    divLoadingContent.css("display", "none");
-    divOverflow.css("display", "none");
+    divLoadingContent.css("display", DisplayOptions.NONE);
+    divOverflow.css("display", DisplayOptions.NONE);
 }
 
 applyWindowListeners();
