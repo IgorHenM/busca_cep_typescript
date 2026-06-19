@@ -1,7 +1,7 @@
 import './style.css';
 import { addListeners, setOutputComponents } from './setup';
 import loadingIcon from "../../assets/loading-svgrepo-com.svg";
-import { $ } from 'jquery';
+import { $, Selector } from '../../utils/TagSelector';
 import { Titles } from "../../utils/Constants";
 
 document.querySelector<HTMLDivElement>('#app')!.innerHTML = `
@@ -39,19 +39,19 @@ document.querySelector<HTMLDivElement>('#app')!.innerHTML = `
     </div>
 `
 
-const button: JQuery<HTMLButtonElement> = $('#search-button');
-const input: JQuery<HTMLInputElement> = $('#cep_id');
-const buttonErrorModal: JQuery<HTMLButtonElement> = $('#close-error-modal');
+const button: Selector<HTMLButtonElement> = $<HTMLButtonElement>('#search-button');
+const input: Selector<HTMLInputElement> = $<HTMLInputElement>('#cep_id');
+const buttonErrorModal: Selector<HTMLButtonElement> = $<HTMLButtonElement>('#close-error-modal');
 
-const info: JQuery<HTMLDivElement> = $('#info');
-const loading: JQuery<HTMLDivElement> = $('#loading_content');
-const overflow: JQuery<HTMLDivElement> = $('#overflow');
-const errorModal: JQuery<HTMLDivElement> = $('#error_modal');
-const errorDesc: JQuery<HTMLDivElement> = $('#error_desc');
-const map: JQuery<HTMLIFrameElement> = $('#map');
+const info: Selector<HTMLDivElement> = $<HTMLDivElement>('#info');
+const loading: Selector<HTMLDivElement> = $<HTMLDivElement>('#loading_content');
+const overflow: Selector<HTMLDivElement> = $<HTMLDivElement>('#overflow');
+const errorModal: Selector<HTMLDivElement> = $<HTMLDivElement>('#error_modal');
+const errorDesc: Selector<HTMLDivElement> = $<HTMLDivElement>('#error_desc');
+const map: Selector<HTMLIFrameElement> = $<HTMLIFrameElement>('#map');
 
-const listenerComponents: [JQuery<HTMLButtonElement>, JQuery<HTMLInputElement>, JQuery<HTMLButtonElement>] = [button, input, buttonErrorModal];
-const outputComponents: [JQuery<HTMLDivElement>, JQuery<HTMLDivElement>, JQuery<HTMLDivElement>, JQuery<HTMLDivElement>, JQuery<HTMLDivElement>, JQuery<HTMLIFrameElement>] = [info, loading, overflow, errorModal, errorDesc, map];
+const listenerComponents: [Selector<HTMLButtonElement>, Selector<HTMLInputElement>, Selector<HTMLButtonElement>] = [button, input, buttonErrorModal];
+const outputComponents: [Selector<HTMLDivElement>, Selector<HTMLDivElement>, Selector<HTMLDivElement>, Selector<HTMLDivElement>, Selector<HTMLDivElement>, Selector<HTMLIFrameElement>] = [info, loading, overflow, errorModal, errorDesc, map];
 
 addListeners(listenerComponents);
 setOutputComponents(outputComponents);
