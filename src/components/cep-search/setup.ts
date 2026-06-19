@@ -4,19 +4,20 @@ import { CepUtils } from "../../utils/CepUtils";
 import { InfoUtils } from "../../utils/InfoUtils";
 import { Descriptions, Titles, TimeRate, DisplayOptions } from "../../utils/Constants";
 import { CepService } from "../../services/CepService";
+import { Selector } from "../../utils/TagSelector";
 let cep = "";
 
-let divInfo: any = null;
-let divLoadingContent: any = null;
-let divOverflow: any = null;
-let divErrorModal: any = null;
-let paragrafError: any = null;
-let frameMap: any = null;
+let divInfo: Selector<HTMLDivElement> | null = null;
+let divLoadingContent: Selector<HTMLDivElement> | null = null;
+let divOverflow: Selector<HTMLDivElement> | null = null;
+let divErrorModal: Selector<HTMLDivElement> | null = null;
+let paragrafError: Selector<HTMLDivElement> | null = null;
+let frameMap: Selector<HTMLIFrameElement> | null = null;
 
 let enterDisabled: boolean = false;
 let actualInfos: CepDTO = CepUtils.emptyCepDTO();
 
-export function addListeners(components: [JQuery<HTMLButtonElement>, JQuery<HTMLInputElement>, JQuery<HTMLButtonElement>]): void {
+export function addListeners(components: [Selector<HTMLButtonElement>, Selector<HTMLInputElement>, Selector<HTMLButtonElement>]): void {
     const [button, input, buttonErrorModal] = components;
 
     button.on('click', (event: Event) => onButtonSearchClick(event));
@@ -29,7 +30,7 @@ export function addListeners(components: [JQuery<HTMLButtonElement>, JQuery<HTML
     applyWindowListeners();
 }
 
-export function setOutputComponents(components: [JQuery<HTMLDivElement>, JQuery<HTMLDivElement>, JQuery<HTMLDivElement>, JQuery<HTMLDivElement>, JQuery<HTMLDivElement>, JQuery<HTMLIFrameElement>]): void {
+export function setOutputComponents(components: [Selector<HTMLDivElement>, Selector<HTMLDivElement>, Selector<HTMLDivElement>, Selector<HTMLDivElement>, Selector<HTMLDivElement>, Selector<HTMLIFrameElement>]): void {
     const [info, loading, overflow, errorModal, errorDesc, map] = components;
 
     divInfo = info;
@@ -90,8 +91,8 @@ async function buscar() {
         const infoStructure = !actualInfos.erro ? InfoUtils.createInfoStructure(actualInfos) 
             : InfoUtils.createInfoStructure(CepUtils.emptyCepDTO());
 
-        divInfo.html(infoStructure);
-        divInfo.css('display', 'flex');
+        divInfo?.html(infoStructure);
+        divInfo?.css('display', 'flex');
 
         setMapLocation(actualInfos);
         closeLoading();
@@ -108,7 +109,7 @@ function setMapLocation(response: CepDTO): void {
     if (request.params.isEmpty()) {
         toggleErrorModal(Descriptions.EMPTY_ADDRESS);
     }
-    frameMap.attr("src", url);
+    frameMap?.attr("src", url);
 }
 
 function setCep(value: string) {
@@ -116,27 +117,27 @@ function setCep(value: string) {
 }
 
 function toggleErrorModal(description?: string) {
-    const isModalOpened = divErrorModal.css("display") === DisplayOptions.BLOCK;
+    const isModalOpened = divErrorModal?.css("display") === DisplayOptions.BLOCK;
     const toggle = isModalOpened ? DisplayOptions.NONE : DisplayOptions.BLOCK;
 
     if (description) {
-        paragrafError.text(description);
+        paragrafError?.text(description);
     }
 
     if (toggle === DisplayOptions.NONE) {
-        divErrorModal.removeClass("opened");
+        divErrorModal?.removeClass("opened");
 
         setTimeout(() => {
-            divErrorModal.css("display", toggle);
-            divOverflow.css("display", toggle);
+            divErrorModal?.css("display", toggle);
+            divOverflow?.css("display", toggle);
         }, 180);
 
     } else {
-        divErrorModal.css("display", toggle);
-        divOverflow.css("display", toggle);
+        divErrorModal?.css("display", toggle);
+        divOverflow?.css("display", toggle);
 
         setTimeout(() => {
-            divErrorModal.addClass("opened");
+            divErrorModal?.addClass("opened");
         }, 50);
 
     }
@@ -144,11 +145,11 @@ function toggleErrorModal(description?: string) {
 }
 
 function openLoading(): void {
-    divLoadingContent.css("display", DisplayOptions.FLEX);
-    divOverflow.css("display", DisplayOptions.BLOCK);
+    divLoadingContent?.css("display", DisplayOptions.FLEX);
+    divOverflow?.css("display", DisplayOptions.BLOCK);
 }
 
 function closeLoading(): void {
-    divLoadingContent.css("display", DisplayOptions.NONE);
-    divOverflow.css("display", DisplayOptions.NONE);
+    divLoadingContent?.css("display", DisplayOptions.NONE);
+    divOverflow?.css("display", DisplayOptions.NONE);
 }
