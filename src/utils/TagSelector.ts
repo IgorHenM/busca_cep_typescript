@@ -1,4 +1,4 @@
-export const $ = <T extends HTMLElement = HTMLElement>(selector: string) => new Selector<T>(document.querySelector(selector) as T);
+export const $ = (selector: string) => new Selector(document.querySelector(selector) as HTMLElement);
 
 export class Selector<T extends HTMLElement> {
     constructor(public element: T) {}

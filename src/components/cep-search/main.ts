@@ -39,16 +39,16 @@ document.querySelector<HTMLDivElement>('#app')!.innerHTML = `
     </div>
 `
 
-const button: Selector<HTMLButtonElement> = $<HTMLButtonElement>('#search-button');
-const input: Selector<HTMLInputElement> = $<HTMLInputElement>('#cep_id');
-const buttonErrorModal: Selector<HTMLButtonElement> = $<HTMLButtonElement>('#close-error-modal');
+const button: Selector<HTMLButtonElement> = $('#search-button') as Selector<HTMLButtonElement>;
+const input: Selector<HTMLInputElement> = $('#cep_id') as Selector<HTMLInputElement>;
+const buttonErrorModal: Selector<HTMLButtonElement> = $('#close-error-modal') as Selector<HTMLButtonElement>;
 
-const info: Selector<HTMLDivElement> = $<HTMLDivElement>('#info');
-const loading: Selector<HTMLDivElement> = $<HTMLDivElement>('#loading_content');
-const overflow: Selector<HTMLDivElement> = $<HTMLDivElement>('#overflow');
-const errorModal: Selector<HTMLDivElement> = $<HTMLDivElement>('#error_modal');
-const errorDesc: Selector<HTMLDivElement> = $<HTMLDivElement>('#error_desc');
-const map: Selector<HTMLIFrameElement> = $<HTMLIFrameElement>('#map');
+const info: Selector<HTMLDivElement> = $('#info') as Selector<HTMLDivElement>;
+const loading: Selector<HTMLDivElement> = $('#loading_content') as Selector<HTMLDivElement>;
+const overflow: Selector<HTMLDivElement> = $('#overflow') as Selector<HTMLDivElement>;
+const errorModal: Selector<HTMLDivElement> = $('#error_modal') as Selector<HTMLDivElement>;
+const errorDesc: Selector<HTMLDivElement> = $('#error_desc') as Selector<HTMLDivElement>;
+const map: Selector<HTMLIFrameElement> = $('#map') as Selector<HTMLIFrameElement>;
 
 const listenerComponents: [Selector<HTMLButtonElement>, Selector<HTMLInputElement>, Selector<HTMLButtonElement>] = [button, input, buttonErrorModal];
 const outputComponents: [Selector<HTMLDivElement>, Selector<HTMLDivElement>, Selector<HTMLDivElement>, Selector<HTMLDivElement>, Selector<HTMLDivElement>, Selector<HTMLIFrameElement>] = [info, loading, overflow, errorModal, errorDesc, map];
